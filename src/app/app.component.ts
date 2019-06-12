@@ -23,6 +23,7 @@ export class AppComponent {
    */
   public takePicture() {
     console.log(`${AppComponent.name}::takePicture`);
+    this.isLoading = true;
 
     const nav: any = navigator;
     const destinationType: any = nav.camera.DestinationType;
@@ -57,11 +58,12 @@ export class AppComponent {
   private postPicture(imageURI: string) {
     console.log(`${AppComponent.name}::postPicture`);
 
-    this.isLoading = true;
     this.appServiceService.$upload(imageURI)
       .toPromise()
       .then((success) => {
         console.log(`${AppComponent.name}::then %o`, success);
+        this.printUrl(success);
+
         this.openSnackBar('Success', null);
       })
       .catch((error) => {
@@ -70,6 +72,16 @@ export class AppComponent {
       })
       .finally(() => {
         this.isLoading = false;
+      });
+  }
+
+  /**
+   * Show the url download.
+   */
+  private printUrl(success) {
+    success.ref.getDownloadURL()
+      .then((s) => {
+        console.log(`${AppComponent.name}::then %o`, s);
       });
   }
 
