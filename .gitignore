@@ -4,6 +4,10 @@
 /dist
 /tmp
 /out-tsc
+/res
+/plugins
+/platforms
+/www
 
 # dependencies
 /node_modules
