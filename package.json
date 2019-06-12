@@ -22,6 +22,7 @@
     "@angular/compiler": "^7.0.0",
     "@angular/core": "^8.0.0",
     "@angular/fire": "^5.2.1",
+    "@angular/flex-layout": "^7.0.0-beta.24",
     "@angular/forms": "~7.0.0",
     "@angular/http": "~7.0.0",
     "@angular/material": "^8.0.1",
