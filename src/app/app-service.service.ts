@@ -13,7 +13,10 @@ export class AppServiceService {
 
   }
 
-  public upload(file: string): Observable<firebase.storage.UploadTaskSnapshot> {
+  /**
+   * Upload process.
+   */
+  public $upload(file: string): Observable<firebase.storage.UploadTaskSnapshot> {
     console.log(`${AppServiceService.name}::upload %o`, file);
 
     const id = Math.random().toString(36).substring(2);
@@ -25,10 +28,9 @@ export class AppServiceService {
     return task.snapshotChanges();
   }
 
-  public getReferenceCloudStorage(file: string): AngularFireStorageReference {
-    return this.storage.ref(file);
-  }
-
+  /**
+   * Convert base64 to blod.
+   */
   public dataURItoBlob(b64Data): Blob {
     console.log(`${AppServiceService.name}::dataURItoBlob b64Data %o `, b64Data);
 

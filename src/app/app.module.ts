@@ -5,6 +5,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AppComponent } from './app.component';
 import { AppServiceService } from './app-service.service';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { AngularMaterialModule } from './angular-material/angular.material.module';
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -25,7 +27,9 @@ const firebaseConfig = {
     BrowserModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule,
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    NoopAnimationsModule,
+    AngularMaterialModule
   ],
   providers: [AppServiceService],
   bootstrap: [AppComponent]
