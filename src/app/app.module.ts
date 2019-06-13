@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { AppServiceService } from './app-service.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularMaterialModule } from './angular-material/angular.material.module';
+import { HomeComponent } from './home/home.component';
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -21,14 +22,15 @@ const firebaseConfig = {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule,
     AngularFireStorageModule,
-    BrowserAnimationsModule,
     AngularMaterialModule
   ],
   providers: [AppServiceService],

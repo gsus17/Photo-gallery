@@ -1,0 +1,21 @@
+<div fxLayout="column"
+     class="general-container">
+  <mat-toolbar color="primary">My App</mat-toolbar>
+  <mat-progress-bar mode="indeterminate"
+                    *ngIf="isLoading"></mat-progress-bar>
+
+  <div *ngIf="imageList.length > 0"
+       fxLayout="column"
+       *ngFor="let item of imageList">
+    <img class="image-container"
+         [src]="item.src" />
+  </div>
+
+  <div class="take-picture-button">
+    <button mat-fab
+            color="primary"
+            (click)="takePicture()">
+      <mat-icon>photo_camera</mat-icon>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+html,
+body {
+  height: 100%;
+}
+
+.general-container{
+  height: 100%;
+}
+
+.take-picture-button{
+  position: absolute;
+  bottom: 45px;
+  right: 44px;
+}
+
+.image-container{
+  height: 150px;
+  width: 150px;
+  max-height: 150px;
+  max-width: 150px;
+  border-radius: 25px;
+  padding: 8px;
+}
