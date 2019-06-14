@@ -4,8 +4,7 @@
   <mat-progress-bar mode="indeterminate"
                     *ngIf="isLoading"></mat-progress-bar>
 
-  <div *ngIf="imageList.length > 0"
-       fxLayout="column"
+  <div fxLayout="column"
        *ngFor="let item of imageList">
     <img class="image-container"
          [src]="item.src" />
