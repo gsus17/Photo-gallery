@@ -9,6 +9,7 @@ import { AngularMaterialModule } from './angular-material/angular.material.modul
 import { HomeComponent } from './home/home.component';
 import { DatabaseService } from './database.service';
 import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore';
+import { DialogEnterNameComponent } from './home/dialog-enter-name/dialog-enter-name.component';
 
 
 // Initialize Firebase
@@ -25,8 +26,10 @@ const firebaseConfig = {
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    DialogEnterNameComponent
   ],
+  entryComponents: [DialogEnterNameComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

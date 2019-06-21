@@ -19,12 +19,14 @@ export class DatabaseService {
   /**
    * Save the img path on data base.
    */
-  public saveImgPath(imgPath: string): void {
+  public saveImgPath(imgPath: string, pictureName: string): void {
     console.log(`${DatabaseService.name}::saveImgPath`);
 
     const newId = this.createId();
 
     const newImage = {
+      id: newId,
+      name: pictureName,
       src: imgPath
     };
 

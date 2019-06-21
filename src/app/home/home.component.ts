@@ -3,6 +3,9 @@ import { UploadService } from '../app-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatabaseService } from '../database.service';
 import { Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogEnterNameComponent } from './dialog-enter-name/dialog-enter-name.component';
+import { difference } from 'lodash';
 
 @Component({
   selector: 'app-home',
@@ -12,12 +15,15 @@ import { Subscription } from 'rxjs';
 export class HomeComponent implements OnInit, OnDestroy {
   public isLoading: boolean;
   public imageList: Image[];
+  public name: string;
   public subscription: Subscription = null;
 
   constructor(
     private appServiceService: UploadService,
     private databaseService: DatabaseService,
-    private snackBar: MatSnackBar) {
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog) {
+
     this.isLoading = false;
     this.imageList = [];
     this.getImagesFromDataBase();
@@ -58,7 +64,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     promise
       .then((imageData: string) => {
-        this.postPicture(imageData);
+        this.openDialog()
+          .then(() => {
+            this.postPicture(imageData, this.name);
+          })
+          .catch(() => {
+            this.isLoading = false;
+          });
       })
       .catch((message) => {
         console.log(`${HomeComponent.name}::onFail message %o`, message);
@@ -69,7 +81,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   /**
    * Upload the imaga to firebase.
    */
-  private postPicture(imageData: string) {
+  private postPicture(imageData: string, pictureName: string) {
     console.log(`${HomeComponent.name}::postPicture`);
 
     this.appServiceService.$upload(imageData)
@@ -79,7 +91,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.openSnackBar('Success', null);
 
         this.printUrl(response);
-        this.saveImgPath(response);
+        this.saveImgPath(response, pictureName);
       })
       .catch((error) => {
         console.log(`${HomeComponent.name}::catch %o`, error);
@@ -103,10 +115,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   /**
    * Save the img path in database.
    */
-  private saveImgPath(success) {
+  private saveImgPath(success, pictureName: string) {
     success.ref.getDownloadURL()
       .then((path: string) => {
-        this.databaseService.saveImgPath(path);
+        this.databaseService.saveImgPath(path, pictureName);
+        this.name = null;
       });
   }
 
@@ -115,20 +128,27 @@ export class HomeComponent implements OnInit, OnDestroy {
    */
   private getImagesFromDataBase() {
     this.subscription = this.databaseService.getImagePaths$()
-      .subscribe((data) => {
+      .subscribe((data: any[]) => {
         console.log(`${HomeComponent.name}::getImagesFromDataBase data %o`, data);
         if (data.length > 0) {
-          this.imageList = [];
 
-          data.forEach((img: any) => {
-            const imageToRender: Image = {
-              name: '',
-              src: img.src
-            };
+          if (this.imageList.length === 0) {
+            data.forEach((img: any) => {
+              const imageToRender: Image = {
+                id: img.id,
+                name: img.name,
+                src: img.src
+              };
 
-            this.imageList.push(imageToRender);
-          });
+              this.imageList.push(imageToRender);
+            });
+          } else {
+            // const newImage: any[] = difference(data, this.imageList);
+            this.imageList = data;
+            // this.imageList = [...this.imageList, ...newImage];
+          }
         }
+
       });
   }
 
@@ -140,9 +160,34 @@ export class HomeComponent implements OnInit, OnDestroy {
       duration: 50,
     });
   }
+
+
+  private openDialog(): Promise<any> {
+    console.log(`${HomeComponent.name}::openDialog`);
+
+    const promise = new Promise((resolve, reject) => {
+      const dialogRef = this.dialog.open(DialogEnterNameComponent, {
+        data: { name: this.name }
+      });
+
+      dialogRef.afterClosed()
+        .subscribe(result => {
+          console.log('The dialog was closed');
+          this.name = result;
+
+          if (this.name !== null && this.name !== undefined) {
+            resolve();
+          } else {
+            reject();
+          }
+        });
+    });
+    return promise;
+  }
 }
 
 export interface Image {
+  id: number;
   name: string;
   src: string;
 }
