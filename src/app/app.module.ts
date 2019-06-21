@@ -1,13 +1,15 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AngularFireModule, } from '@angular/fire';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AppComponent } from './app.component';
-import { AppServiceService } from './app-service.service';
+import { UploadService } from './app-service.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularMaterialModule } from './angular-material/angular.material.module';
 import { HomeComponent } from './home/home.component';
+import { DatabaseService } from './database.service';
+import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore';
+
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -33,7 +35,7 @@ const firebaseConfig = {
     AngularFireStorageModule,
     AngularMaterialModule
   ],
-  providers: [AppServiceService],
+  providers: [UploadService, DatabaseService, { provide: FirestoreSettingsToken, useValue: {} }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

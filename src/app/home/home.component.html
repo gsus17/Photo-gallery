@@ -4,10 +4,13 @@
   <mat-progress-bar mode="indeterminate"
                     *ngIf="isLoading"></mat-progress-bar>
 
-  <div fxLayout="column"
-       *ngFor="let item of imageList">
-    <img class="image-container"
-         [src]="item.src" />
+
+  <div fxLayout="row wrap">
+    <div *ngFor="let item of imageList"
+         class="image-container">
+      <img class="image-container"
+           [src]="item.src" />
+    </div>
   </div>
 
   <div class="take-picture-button">

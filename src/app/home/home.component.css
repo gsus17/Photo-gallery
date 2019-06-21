@@ -16,8 +16,8 @@ body {
 .image-container{
   height: 150px;
   width: 150px;
-  max-height: 150px;
-  max-width: 150px;
-  border-radius: 25px;
-  padding: 8px;
+  max-height: 95px;
+  max-width: 95px;
+  border-radius: 16px;
+  padding: 3px;
 }

@@ -1,26 +1,33 @@
-import { Component, OnInit } from '@angular/core';
-import { AppServiceService } from '../app-service.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { UploadService } from '../app-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DatabaseService } from '../database.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
-
-  title = 'Upload-image-firebase-research';
+export class HomeComponent implements OnInit, OnDestroy {
   public isLoading: boolean;
   public imageList: Image[];
+  public subscription: Subscription = null;
 
   constructor(
-    private appServiceService: AppServiceService,
+    private appServiceService: UploadService,
+    private databaseService: DatabaseService,
     private snackBar: MatSnackBar) {
     this.isLoading = false;
     this.imageList = [];
+    this.getImagesFromDataBase();
   }
 
   ngOnInit() {
+  }
+
+  public ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   /**
@@ -55,6 +62,7 @@ export class HomeComponent implements OnInit {
       })
       .catch((message) => {
         console.log(`${HomeComponent.name}::onFail message %o`, message);
+        this.isLoading = false;
       });
   }
 
@@ -70,8 +78,8 @@ export class HomeComponent implements OnInit {
         console.log(`${HomeComponent.name}::then %o`, response);
         this.openSnackBar('Success', null);
 
-        this.renderImage(imageData, response);
         this.printUrl(response);
+        this.saveImgPath(response);
       })
       .catch((error) => {
         console.log(`${HomeComponent.name}::catch %o`, error);
@@ -93,18 +101,35 @@ export class HomeComponent implements OnInit {
   }
 
   /**
-   * Insert the image to local list to render.
+   * Save the img path in database.
    */
-  private renderImage(imageData, response) {
-    console.log(`${HomeComponent.name}::renderImage`);
+  private saveImgPath(success) {
+    success.ref.getDownloadURL()
+      .then((path: string) => {
+        this.databaseService.saveImgPath(path);
+      });
+  }
 
-    const imageToRender: Image = {
-      name: '',
-      src: `data:image/jpeg;base64,${imageData}`
-    };
+  /**
+   * Listen changes on database for render imgs.
+   */
+  private getImagesFromDataBase() {
+    this.subscription = this.databaseService.getImagePaths$()
+      .subscribe((data) => {
+        console.log(`${HomeComponent.name}::getImagesFromDataBase data %o`, data);
+        if (data.length > 0) {
+          this.imageList = [];
 
-    this.imageList.push(imageToRender);
-    console.log(`${HomeComponent.name}::renderImage imageList %o`, this.imageList);
+          data.forEach((img: any) => {
+            const imageToRender: Image = {
+              name: '',
+              src: img.src
+            };
+
+            this.imageList.push(imageToRender);
+          });
+        }
+      });
   }
 
   /**
