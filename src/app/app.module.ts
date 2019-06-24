@@ -10,7 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { DatabaseService } from './database.service';
 import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore';
 import { DialogEnterNameComponent } from './home/dialog-enter-name/dialog-enter-name.component';
-
+import { DialogImageDetailComponent } from './home/dialog-image-detail/dialog-image-detail.component';
 
 // Firebase configuration.
 const firebaseConfig = {
@@ -27,9 +27,13 @@ const firebaseConfig = {
   declarations: [
     AppComponent,
     HomeComponent,
-    DialogEnterNameComponent
+    DialogEnterNameComponent,
+    DialogImageDetailComponent
   ],
-  entryComponents: [DialogEnterNameComponent],
+  entryComponents: [
+    DialogEnterNameComponent,
+    DialogImageDetailComponent
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

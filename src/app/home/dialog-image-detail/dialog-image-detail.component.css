@@ -1,0 +1,23 @@
+.image-container{
+  height: 250px;
+  width: 250px;
+  margin-bottom: 16px;
+  max-height: 250px;
+  max-width: 250px;
+  border-radius: 16px;
+  padding: 3px;
+}
+
+.detail-label{
+  font-weight: bold;
+  color: black;
+  padding-right: 8px;
+}
+
+.detail-icon{
+  padding-right: 8px;
+}
+
+.data-src{
+  overflow-x: scroll;
+}

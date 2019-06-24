@@ -1,0 +1,61 @@
+<div mat-dialog-content>
+  <p>Informacion</p>
+
+  <div fxLayout="row"
+       fxLayoutAlign="center center">
+    <img class="image-container"
+         [src]="data.src" />
+  </div>
+
+  <div fxLayout="column">
+    <div fxLayout="row">
+      <i class="material-icons detail-icon">
+        vpn_key
+      </i>
+      <span>{{data.id}}</span>
+    </div>
+
+    <div fxLayout="row">
+      <i class="material-icons detail-icon">
+        info
+      </i>
+      <span>{{data.name}}</span>
+    </div>
+
+    <div fxLayout="row">
+      <i class="material-icons detail-icon">
+        cloud_upload
+      </i>
+      <span class="data-src">{{data.src}}</span>
+    </div>
+
+    <div fxLayout="row">
+      <i class="material-icons detail-icon">
+        photo_size_select_large
+      </i>
+      <span class="data-src">{{data.size}}</span>
+    </div>
+    <div fxLayout="row">
+      <i class="material-icons detail-icon">
+        info
+      </i>
+      <span class="data-src">{{data.contentType}}</span>
+    </div>
+    <div fxLayout="row">
+      <i class="material-icons detail-icon">
+        photo
+      </i>
+      <span class="data-src">{{data.fullPath}}</span>
+    </div>
+    <div fxLayout="row">
+      <i class="material-icons detail-icon">
+        insert_invitation
+      </i>
+      <span class="data-src">{{data.timeCreated | date:'dd/MM/yy HH:mm'}}</span>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button
+          (click)="onNoClick()">Cerrar</button>
+</div>

@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEnterNameComponent } from './dialog-enter-name/dialog-enter-name.component';
 import { difference } from 'lodash';
+import { DialogImageDetailComponent } from './dialog-image-detail/dialog-image-detail.component';
 
 @Component({
   selector: 'app-home',
@@ -53,6 +54,15 @@ export class HomeComponent implements OnInit, OnDestroy {
    */
   public ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  /**
+   * showDetails
+   */
+  public showDetails(image: Image) {
+    console.log(`${HomeComponent.name}::showDetails`);
+
+    this.openImageDetailsDialog(image);
   }
 
   /**
@@ -106,7 +116,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.appServiceService.$upload(imageData)
       .toPromise()
       .then((response) => {
-        console.log(`${HomeComponent.name}::then %o`, response);
+        console.log(`${HomeComponent.name}::postPicture::then %o`, response);
         this.openSnackBar('Success', null);
 
         this.printUrl(response);
@@ -137,7 +147,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private saveImgPath(success, pictureName: string) {
     success.ref.getDownloadURL()
       .then((path: string) => {
-        this.databaseService.saveImgPath(path, pictureName);
+        this.databaseService.saveImgPath(success, path, pictureName);
         this.name = null;
       });
   }
@@ -156,15 +166,17 @@ export class HomeComponent implements OnInit, OnDestroy {
               const imageToRender: Image = {
                 id: img.id,
                 name: img.name,
-                src: img.src
+                src: img.src,
+                size: img.size,
+                contentType: img.contentType,
+                fullPath: img.fullPath,
+                timeCreated: img.timeCreated
               };
 
               this.imageList.push(imageToRender);
             });
           } else {
-            // const newImage: any[] = difference(data, this.imageList);
             this.imageList = data;
-            // this.imageList = [...this.imageList, ...newImage];
           }
         }
       });
@@ -205,10 +217,37 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     return promise;
   }
+
+  /**
+   * Open the dialog to show the image detail.
+   */
+  private openImageDetailsDialog(image: Image): Promise<any> {
+    console.log(`${HomeComponent.name}::openImageDetailsDialog`);
+
+    const promise = new Promise((resolve, reject) => {
+      const dialogRef = this.dialog.open(DialogImageDetailComponent, {
+        data: image
+      });
+
+      dialogRef.afterClosed()
+        .subscribe(result => {
+          console.log('The dialog was closed');
+          this.name = result;
+
+          resolve();
+        });
+    });
+
+    return promise;
+  }
 }
 
 export interface Image {
-  id: number;
+  id: string;
   name: string;
   src: string;
+  size: number;
+  contentType: string;
+  fullPath: string;
+  timeCreated: Date;
 }

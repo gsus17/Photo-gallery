@@ -1,14 +1,15 @@
 <div fxLayout="column"
      class="general-container">
-  <mat-toolbar color="primary">My App</mat-toolbar>
+  <mat-toolbar color="primary">Photo Gallery</mat-toolbar>
   <mat-progress-bar mode="indeterminate"
                     *ngIf="isLoading"></mat-progress-bar>
 
   <div fxLayout="row wrap">
-    <div *ngFor="let item of imageList"
-         class="image-container">
+    <div *ngFor="let image of imageList"
+         class="image-container"
+         (click)="showDetails(image)">
       <img class="image-container"
-           [src]="item.src" />
+           [src]="image.src" />
     </div>
   </div>
 
