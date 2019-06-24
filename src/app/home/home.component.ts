@@ -13,9 +13,25 @@ import { difference } from 'lodash';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, OnDestroy {
+
+  /**
+   * Evaluate the loading state.
+   */
   public isLoading: boolean;
+
+  /**
+   * Image list to render.
+   */
   public imageList: Image[];
+
+  /**
+   * Name of captured image.
+   */
   public name: string;
+
+  /**
+   * Subscription to firebase database.
+   */
   public subscription: Subscription = null;
 
   constructor(
@@ -32,6 +48,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit() {
   }
 
+  /**
+   * Unsubscribe.
+   */
   public ngOnDestroy() {
     this.subscription.unsubscribe();
   }
@@ -148,7 +167,6 @@ export class HomeComponent implements OnInit, OnDestroy {
             // this.imageList = [...this.imageList, ...newImage];
           }
         }
-
       });
   }
 
@@ -161,7 +179,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-
+  /**
+   * Open the dialog to apply for the image name.
+   */
   private openDialog(): Promise<any> {
     console.log(`${HomeComponent.name}::openDialog`);
 
@@ -182,6 +202,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           }
         });
     });
+
     return promise;
   }
 }

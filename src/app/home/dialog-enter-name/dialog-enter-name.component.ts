@@ -15,7 +15,10 @@ export class DialogEnterNameComponent implements OnInit {
   ngOnInit() {
   }
 
-  onNoClick(): void {
+  /**
+   * Close the dialog.
+   */
+  public onNoClick(): void {
     this.dialogRef.close();
   }
 }

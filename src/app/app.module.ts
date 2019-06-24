@@ -12,7 +12,7 @@ import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/fi
 import { DialogEnterNameComponent } from './home/dialog-enter-name/dialog-enter-name.component';
 
 
-// Initialize Firebase
+// Firebase configuration.
 const firebaseConfig = {
   apiKey: 'AIzaSyAxaak2fyxzXea9JvzaZGd7_wrtXbyrVag',
   authDomain: 'upload-img-research.firebaseapp.com',
