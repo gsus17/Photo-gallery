@@ -29,9 +29,13 @@
     "@angular/platform-browser-dynamic": "~8.0.0",
     "@angular/router": "~8.0.0",
     "blob-util": "^2.0.2",
+    "com-sarriaroman-photoviewer": "^1.2.2",
+    "com.subitolabs.android.cordova.galleryapi": "git+https://github.com/Collaborne/cordova-gallery-api.git",
     "cordova-android": "^7.1.4",
+    "cordova-gallery-access": "^3.0.2",
     "cordova-plugin-camera": "^4.0.3",
     "cordova-plugin-whitelist": "^1.3.3",
+    "es.keensoft.fullscreenimage": "^0.2.10",
     "firebase": "^6.1.1",
     "hammerjs": "^2.0.8",
     "lodash": "^4.17.11",
@@ -64,7 +68,10 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-camera": {},
-      "cordova-plugin-whitelist": {}
+      "cordova-plugin-whitelist": {},
+      "com.subitolabs.android.cordova.galleryapi": {},
+      "es.keensoft.fullscreenimage": {},
+      "com-sarriaroman-photoviewer": {}
     },
     "platforms": [
       "android"

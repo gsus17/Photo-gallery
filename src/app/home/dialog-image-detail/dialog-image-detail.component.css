@@ -21,3 +21,7 @@
 .data-src{
   overflow-x: scroll;
 }
+
+.show-on-viewer-container{
+  margin: 8px 0;
+}

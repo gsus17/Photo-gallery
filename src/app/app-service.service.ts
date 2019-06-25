@@ -8,6 +8,11 @@ import { Observable } from 'rxjs';
 })
 export class UploadService {
 
+  /**
+   * Base url for access to firebase storage.
+   */
+  private baseUrlDB = 'uploads';
+
   constructor(private storage: AngularFireStorage) {
 
   }
@@ -19,11 +24,19 @@ export class UploadService {
     console.log(`${UploadService.name}::upload %o`, file);
 
     const id = Math.random().toString(36).substring(2);
-    const filePath = `uploads/${id}`;
+    const filePath = `${this.baseUrlDB}/${id}`;
     const blob = this.mapDataURItoBlob(file);
     const task = this.storage.upload(filePath, blob);
 
     return task.snapshotChanges();
+  }
+
+  /**
+   * Delete a specific image from firebase firestore.
+   */
+  public deleteImage(imgPath: string): void {
+    console.log(`${UploadService.name}::deleteImage`);
+    this.storage.ref(imgPath).delete();
   }
 
   /**

@@ -8,6 +8,11 @@ import { Image } from './home/home.component';
 })
 export class DatabaseService {
 
+  /**
+   * Base url for access to firebase firestore.
+   */
+  private baseUrlDB = 'paths';
+
   constructor(private db: AngularFirestore) { }
 
   /**
@@ -35,15 +40,23 @@ export class DatabaseService {
       timeCreated: success.metadata.timeCreated
     };
 
-    this.db.collection('paths')
+    this.db.collection(this.baseUrlDB)
       .doc(newId)
       .set(newImage);
+  }
+
+  /**
+   * Delete a specific image from firebase storage.
+   */
+  public deleteImage(imgPath: string): void {
+    console.log(`${DatabaseService.name}::deleteImage`);
+    this.db.collection(this.baseUrlDB).doc(imgPath).delete();
   }
 
   /**
    * Detect changes on database.
    */
   public getImagePaths$(): Observable<{}[]> {
-    return this.db.collection('paths').valueChanges();
+    return this.db.collection(this.baseUrlDB).valueChanges();
   }
 }

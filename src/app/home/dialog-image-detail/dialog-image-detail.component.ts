@@ -17,6 +17,14 @@ export class DialogImageDetailComponent implements OnInit {
   }
 
   /**
+   * Open image on viewer.
+   */
+  public showOnViewer(image: Image): void {
+    const w: any = window;
+    w.PhotoViewer.show(image.src, image.name);
+  }
+
+  /**
    * Close the dialog.
    */
   public onNoClick(): void {

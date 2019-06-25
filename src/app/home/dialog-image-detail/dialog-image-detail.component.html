@@ -1,10 +1,20 @@
 <div mat-dialog-content>
   <p>Informacion</p>
 
-  <div fxLayout="row"
+  <div fxLayout="column"
        fxLayoutAlign="center center">
     <img class="image-container"
          [src]="data.src" />
+
+    <button mat-button
+            class="show-on-viewer-container"
+            (click)="showOnViewer(data)">
+      <i class="material-icons detail-icon">
+        aspect_ratio
+      </i>
+      Ver fullscreen
+    </button>
+
   </div>
 
   <div fxLayout="column">
@@ -55,7 +65,16 @@
     </div>
   </div>
 </div>
-<div mat-dialog-actions>
+<div mat-dialog-actions
+     fxLayout="row"
+     fxLayoutAlign="space-between center">
   <button mat-button
           (click)="onNoClick()">Cerrar</button>
+  <button mat-button
+          [mat-dialog-close]="data">
+    <i class="material-icons detail-icon">
+      delete
+    </i>
+    Eliminar
+  </button>
 </div>

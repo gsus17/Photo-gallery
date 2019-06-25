@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public subscription: Subscription = null;
 
   constructor(
-    private appServiceService: UploadService,
+    private uploadService: UploadService,
     private databaseService: DatabaseService,
     private snackBar: MatSnackBar,
     public dialog: MatDialog) {
@@ -87,7 +87,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         }, {
           quality: 50,
           allowEdit: false,
-          destinationType: destinationType.DATA_URL
+          destinationType: destinationType.DATA_URL,
+          correctOrientation: true,
+          saveToPhotoAlbum: true
         });
     });
 
@@ -113,7 +115,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private postPicture(imageData: string, pictureName: string) {
     console.log(`${HomeComponent.name}::postPicture`);
 
-    this.appServiceService.$upload(imageData)
+    this.uploadService.$upload(imageData)
       .toPromise()
       .then((response) => {
         console.log(`${HomeComponent.name}::postPicture::then %o`, response);
@@ -178,6 +180,8 @@ export class HomeComponent implements OnInit, OnDestroy {
           } else {
             this.imageList = data;
           }
+        } else {
+          this.imageList = data;
         }
       });
   }
@@ -189,6 +193,31 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.snackBar.open(message, action, {
       duration: 50,
     });
+  }
+
+  /**
+   * Delete a specific image.
+   */
+  private deleteImage(image: Image) {
+    console.log(`${HomeComponent.name}::deleteImage`);
+    this.deleteImageFromFirebaseDatabase(image.id);
+    this.deleteImageFromFirebaseStorage(image.fullPath);
+  }
+
+  /**
+   * Delete a specific image from firebase storage.
+   */
+  private deleteImageFromFirebaseStorage(path: string) {
+    console.log(`${HomeComponent.name}::deleteImageFromFirebaseStorage path %o`, path);
+    this.uploadService.deleteImage(path);
+  }
+
+  /**
+   * Delete a specific image from firebase database.
+   */
+  private deleteImageFromFirebaseDatabase(id: string) {
+    console.log(`${HomeComponent.name}::deleteImageFromFirebaseDatabase id %o`, id);
+    this.databaseService.deleteImage(id);
   }
 
   /**
@@ -232,8 +261,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       dialogRef.afterClosed()
         .subscribe(result => {
           console.log('The dialog was closed');
-          this.name = result;
-
+          this.deleteImage(result);
           resolve();
         });
     });
