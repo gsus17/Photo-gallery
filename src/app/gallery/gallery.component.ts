@@ -5,15 +5,14 @@ import { DatabaseService } from '../database.service';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEnterNameComponent } from './dialog-enter-name/dialog-enter-name.component';
-import { difference } from 'lodash';
 import { DialogImageDetailComponent } from './dialog-image-detail/dialog-image-detail.component';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: 'app-gallery',
+  templateUrl: './gallery.component.html',
+  styleUrls: ['./gallery.component.css']
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class GalleryComponent implements OnInit, OnDestroy {
 
   /**
    * Evaluate the loading state.
@@ -40,13 +39,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     private databaseService: DatabaseService,
     private snackBar: MatSnackBar,
     public dialog: MatDialog) {
-
-    this.isLoading = false;
-    this.imageList = [];
-    this.getImagesFromDataBase();
   }
 
-  ngOnInit() {
+  /**
+   * Init component.
+   */
+  public ngOnInit() {
+    this.isLoading = true;
+    this.imageList = [];
+    this.getImagesFromDataBase();
   }
 
   /**
@@ -60,8 +61,7 @@ export class HomeComponent implements OnInit, OnDestroy {
    * showDetails
    */
   public showDetails(image: Image) {
-    console.log(`${HomeComponent.name}::showDetails`);
-
+    console.log(`${GalleryComponent.name}::showDetails`);
     this.openImageDetailsDialog(image);
   }
 
@@ -69,7 +69,9 @@ export class HomeComponent implements OnInit, OnDestroy {
    * Take a picture process.
    */
   public takePicture() {
-    console.log(`${HomeComponent.name}::takePicture`);
+    const methodName = `${GalleryComponent.name}::takePicture`;
+    console.log(`${methodName}`);
+
     this.isLoading = true;
 
     const nav: any = navigator;
@@ -95,16 +97,18 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     promise
       .then((imageData: string) => {
-        this.openDialog()
+        this.openImageNameDialog()
           .then(() => {
+            console.log(`${methodName}::getPicture (then)`);
             this.postPicture(imageData, this.name);
           })
           .catch(() => {
+            console.log(`${methodName}::getPicture (catch)`);
             this.isLoading = false;
           });
       })
       .catch((message) => {
-        console.log(`${HomeComponent.name}::onFail message %o`, message);
+        console.log(`${GalleryComponent.name}::onFail message %o`, message);
         this.isLoading = false;
       });
   }
@@ -113,19 +117,18 @@ export class HomeComponent implements OnInit, OnDestroy {
    * Upload the imaga to firebase.
    */
   private postPicture(imageData: string, pictureName: string) {
-    console.log(`${HomeComponent.name}::postPicture`);
+    const methodName = `${GalleryComponent.name}::postPicture`;
+    console.log(`${methodName}`);
 
     this.uploadService.$upload(imageData)
       .toPromise()
       .then((response) => {
-        console.log(`${HomeComponent.name}::postPicture::then %o`, response);
+        console.log(`${methodName} (then) response %o`, response);
         this.openSnackBar('Success', null);
-
-        this.printUrl(response);
         this.saveImgPath(response, pictureName);
       })
       .catch((error) => {
-        console.log(`${HomeComponent.name}::catch %o`, error);
+        console.log(`${methodName} (catch) error %o`, error);
         this.openSnackBar('Error', null);
       })
       .finally(() => {
@@ -134,19 +137,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Show the url download.
-   */
-  private printUrl(success) {
-    success.ref.getDownloadURL()
-      .then((s) => {
-        console.log(`${HomeComponent.name}::then %o`, s);
-      });
-  }
-
-  /**
    * Save the img path in database.
    */
   private saveImgPath(success, pictureName: string) {
+    const methodName = `${GalleryComponent.name}::saveImgPath`;
+    console.log(`${methodName}`);
+
     success.ref.getDownloadURL()
       .then((path: string) => {
         this.databaseService.saveImgPath(success, path, pictureName);
@@ -158,9 +154,13 @@ export class HomeComponent implements OnInit, OnDestroy {
    * Listen changes on database for render imgs.
    */
   private getImagesFromDataBase() {
+    const methodName = `${GalleryComponent.name}::getImagesFromDataBase`;
+    console.log(`${methodName}`);
+
     this.subscription = this.databaseService.getImagePaths$()
       .subscribe((data: any[]) => {
-        console.log(`${HomeComponent.name}::getImagesFromDataBase data %o`, data);
+        console.log(`${methodName}::subscription data %o`, data);
+
         if (data.length > 0) {
 
           if (this.imageList.length === 0) {
@@ -183,6 +183,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         } else {
           this.imageList = data;
         }
+
+        this.isLoading = false;
       });
   }
 
@@ -190,8 +192,10 @@ export class HomeComponent implements OnInit, OnDestroy {
    * Show the message sucess or fail.
    */
   private openSnackBar(message: string, action: string) {
+    console.log(`${GalleryComponent.name}::openSnackBar`);
+
     this.snackBar.open(message, action, {
-      duration: 50,
+      duration: 2000,
     });
   }
 
@@ -199,16 +203,19 @@ export class HomeComponent implements OnInit, OnDestroy {
    * Delete a specific image.
    */
   private deleteImage(image: Image) {
-    console.log(`${HomeComponent.name}::deleteImage`);
+    console.log(`${GalleryComponent.name}::deleteImage`);
+
     this.deleteImageFromFirebaseDatabase(image.id);
     this.deleteImageFromFirebaseStorage(image.fullPath);
+
+    this.openSnackBar('Deleted', null);
   }
 
   /**
    * Delete a specific image from firebase storage.
    */
   private deleteImageFromFirebaseStorage(path: string) {
-    console.log(`${HomeComponent.name}::deleteImageFromFirebaseStorage path %o`, path);
+    console.log(`${GalleryComponent.name}::deleteImageFromFirebaseStorage path %o`, path);
     this.uploadService.deleteImage(path);
   }
 
@@ -216,15 +223,16 @@ export class HomeComponent implements OnInit, OnDestroy {
    * Delete a specific image from firebase database.
    */
   private deleteImageFromFirebaseDatabase(id: string) {
-    console.log(`${HomeComponent.name}::deleteImageFromFirebaseDatabase id %o`, id);
+    console.log(`${GalleryComponent.name}::deleteImageFromFirebaseDatabase id %o`, id);
     this.databaseService.deleteImage(id);
   }
 
   /**
    * Open the dialog to apply for the image name.
    */
-  private openDialog(): Promise<any> {
-    console.log(`${HomeComponent.name}::openDialog`);
+  private openImageNameDialog(): Promise<any> {
+    const methodName = `${GalleryComponent.name}::openImageNameDialog`;
+    console.log(`${methodName}`);
 
     const promise = new Promise((resolve, reject) => {
       const dialogRef = this.dialog.open(DialogEnterNameComponent, {
@@ -233,7 +241,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       dialogRef.afterClosed()
         .subscribe(result => {
-          console.log('The dialog was closed');
+          console.log(`${methodName}::The dialog was closed`);
           this.name = result;
 
           if (this.name !== null && this.name !== undefined) {
@@ -251,7 +259,8 @@ export class HomeComponent implements OnInit, OnDestroy {
    * Open the dialog to show the image detail.
    */
   private openImageDetailsDialog(image: Image): Promise<any> {
-    console.log(`${HomeComponent.name}::openImageDetailsDialog`);
+    const methodName = `${GalleryComponent.name}::openImageDetailsDialog`;
+    console.log(`${methodName}`);
 
     const promise = new Promise((resolve, reject) => {
       const dialogRef = this.dialog.open(DialogImageDetailComponent, {
@@ -260,7 +269,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       dialogRef.afterClosed()
         .subscribe(result => {
-          console.log('The dialog was closed');
+          console.log(`${methodName}::The dialog was closed`);
           this.deleteImage(result);
           resolve();
         });

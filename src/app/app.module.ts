@@ -6,11 +6,11 @@ import { AppComponent } from './app.component';
 import { UploadService } from './app-service.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularMaterialModule } from './angular-material/angular.material.module';
-import { HomeComponent } from './home/home.component';
+import { GalleryComponent } from './gallery/gallery.component';
 import { DatabaseService } from './database.service';
 import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore';
-import { DialogEnterNameComponent } from './home/dialog-enter-name/dialog-enter-name.component';
-import { DialogImageDetailComponent } from './home/dialog-image-detail/dialog-image-detail.component';
+import { DialogEnterNameComponent } from './gallery/dialog-enter-name/dialog-enter-name.component';
+import { DialogImageDetailComponent } from './gallery/dialog-image-detail/dialog-image-detail.component';
 
 // Firebase configuration.
 const firebaseConfig = {
@@ -26,7 +26,7 @@ const firebaseConfig = {
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
+    GalleryComponent,
     DialogEnterNameComponent,
     DialogImageDetailComponent
   ],

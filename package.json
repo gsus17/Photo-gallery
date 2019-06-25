@@ -1,5 +1,5 @@
 {
-  "name": "my-app8",
+  "name": "photogallery",
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
@@ -9,10 +9,10 @@
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
-  "displayName": "HelloCordova",
-  "description": "A sample Apache Cordova application that responds to the deviceready event.",
+  "displayName": "Photo Gallery",
+  "description": "A simple research for capture a photo with the mobile camera, set a name and then that captured image upload to a Firebase database.",
   "main": "index.js",
-  "author": "Apache Cordova Team",
+  "author": "Suarez Molina Jesus",
   "license": "Apache-2.0",
   "private": true,
   "dependencies": {

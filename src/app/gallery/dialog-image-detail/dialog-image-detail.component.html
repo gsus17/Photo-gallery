@@ -3,7 +3,8 @@
 
   <div fxLayout="column"
        fxLayoutAlign="center center">
-    <img class="image-container"
+    <img (click)="showOnViewer(data)"
+         class="image-container"
          [src]="data.src" />
 
     <button mat-button
@@ -14,7 +15,6 @@
       </i>
       Ver fullscreen
     </button>
-
   </div>
 
   <div fxLayout="column">
@@ -69,7 +69,12 @@
      fxLayout="row"
      fxLayoutAlign="space-between center">
   <button mat-button
-          (click)="onNoClick()">Cerrar</button>
+          (click)="onNoClick()">
+    <i class="material-icons detail-icon">
+      arrow_back
+    </i>
+    Vover
+  </button>
   <button mat-button
           [mat-dialog-close]="data">
     <i class="material-icons detail-icon">
